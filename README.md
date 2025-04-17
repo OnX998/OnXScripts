@@ -28,7 +28,11 @@ This is a solo project, and contributions are not currently open. However, feel 
 
 ## License
 
-This repository is available under the MIT License. You are free to use, modify, and distribute the scripts in your projects, but please credit the original creator.
+This repository is available under the MIT License.
+
+![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+You are free to use, modify, and distribute the scripts in your projects, but please credit the original creator.
 
 ---
 
