@@ -38,4 +38,4 @@ You are free to use, modify, and distribute the scripts in your projects, but pl
 
 Thank you for checking out **OnXScripts**! I hope these executor scripts help you enhance your Roblox experience.
 
-´´´loadstring(game:HttpGet("https://raw.githubusercontent.com/OnX998/OnXScripts/refs/heads/main/scripts/Trashcan%20Script.txt"))()´´´
+```loadstring(game:HttpGet("https://raw.githubusercontent.com/OnX998/OnXScripts/refs/heads/main/scripts/Trashcan%20Script.txt"))()```
