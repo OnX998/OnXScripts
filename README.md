@@ -1,3 +1,3 @@
 # OnXScripts README.md
 
-![Alt Text](https://i.ibb.co/1tbkXZG/On-XScripts.png)
+![Alt Text](https://github.com/OnX998/OnXScripts/blob/main/images/OnXScripts.png)
