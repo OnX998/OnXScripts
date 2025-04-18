@@ -41,6 +41,7 @@ function UILib:CreateWindow(title)
 
     local lib = {}
 
+    -- Label
     function lib:Label(text)
         local lbl = Instance.new("TextLabel")
         lbl.Size = UDim2.new(1, 0, 0, 25)
@@ -54,6 +55,7 @@ function UILib:CreateWindow(title)
         lbl.Parent = container
     end
 
+    -- Button
     function lib:Button(text, callback)
         local btn = Instance.new("TextButton")
         btn.Size = UDim2.new(1, 0, 0, 30)
@@ -70,6 +72,7 @@ function UILib:CreateWindow(title)
         end)
     end
 
+    -- Toggle
     function lib:Toggle(text, default, callback)
         local toggled = default or false
 
@@ -104,6 +107,124 @@ function UILib:CreateWindow(title)
             toggleBtn.Text = toggled and "ON" or "OFF"
             toggleBtn.BackgroundColor3 = toggled and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(100, 100, 100)
             pcall(callback, toggled)
+        end)
+    end
+
+    -- Slider
+    function lib:Slider(text, min, max, default, callback)
+        local sliderValue = default or min
+        local sliderHolder = Instance.new("Frame")
+        sliderHolder.Size = UDim2.new(1, 0, 0, 50)
+        sliderHolder.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        sliderHolder.Parent = container
+
+        local sliderText = Instance.new("TextLabel")
+        sliderText.Size = UDim2.new(0.8, 0, 1, 0)
+        sliderText.Position = UDim2.new(0, 5, 0, 0)
+        sliderText.Text = text
+        sliderText.TextColor3 = Color3.fromRGB(255, 255, 255)
+        sliderText.Font = Enum.Font.Gotham
+        sliderText.TextSize = 16
+        sliderText.TextXAlignment = Enum.TextXAlignment.Left
+        sliderText.Parent = sliderHolder
+
+        local sliderFrame = Instance.new("Frame")
+        sliderFrame.Size = UDim2.new(0.8, 0, 0.2, 0)
+        sliderFrame.Position = UDim2.new(0.1, 0, 0.5, -10)
+        sliderFrame.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        sliderFrame.Parent = sliderHolder
+
+        local sliderIndicator = Instance.new("Frame")
+        sliderIndicator.Size = UDim2.new(0, (sliderValue - min) / (max - min) * sliderFrame.Size.X.Offset, 1, 0)
+        sliderIndicator.BackgroundColor3 = Color3.fromRGB(80, 180, 80)
+        sliderIndicator.Parent = sliderFrame
+
+        sliderFrame.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                local mousePos = input.Position.X - sliderFrame.AbsolutePosition.X
+                local newValue = math.clamp(mousePos / sliderFrame.Size.X.Offset, 0, 1)
+                sliderValue = math.floor(newValue * (max - min) + min)
+                sliderIndicator.Size = UDim2.new(0, newValue * sliderFrame.Size.X.Offset, 1, 0)
+                pcall(callback, sliderValue)
+            end
+        end)
+    end
+
+    -- Input Field
+    function lib:InputField(placeholder, callback)
+        local inputHolder = Instance.new("Frame")
+        inputHolder.Size = UDim2.new(1, 0, 0, 40)
+        inputHolder.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        inputHolder.Parent = container
+
+        local inputText = Instance.new("TextBox")
+        inputText.Size = UDim2.new(1, 0, 1, 0)
+        inputText.PlaceholderText = placeholder or "Enter text"
+        inputText.Text = ""
+        inputText.TextColor3 = Color3.fromRGB(255, 255, 255)
+        inputText.Font = Enum.Font.Gotham
+        inputText.TextSize = 16
+        inputText.BackgroundTransparency = 0.2
+        inputText.Parent = inputHolder
+
+        inputText.FocusLost:Connect(function()
+            pcall(callback, inputText.Text)
+        end)
+    end
+
+    -- Dropdown
+    function lib:Dropdown(text, options, callback)
+        local dropdownHolder = Instance.new("Frame")
+        dropdownHolder.Size = UDim2.new(1, 0, 0, 30)
+        dropdownHolder.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        dropdownHolder.Parent = container
+
+        local dropdownText = Instance.new("TextLabel")
+        dropdownText.Size = UDim2.new(0.75, 0, 1, 0)
+        dropdownText.Position = UDim2.new(0, 5, 0, 0)
+        dropdownText.Text = text
+        dropdownText.TextColor3 = Color3.fromRGB(255, 255, 255)
+        dropdownText.Font = Enum.Font.Gotham
+        dropdownText.TextSize = 16
+        dropdownText.TextXAlignment = Enum.TextXAlignment.Left
+        dropdownText.Parent = dropdownHolder
+
+        local dropdownBtn = Instance.new("TextButton")
+        dropdownBtn.Size = UDim2.new(0.2, 0, 0.7, 0)
+        dropdownBtn.Position = UDim2.new(0.75, 5, 0.15, 0)
+        dropdownBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        dropdownBtn.Text = "Select"
+        dropdownBtn.Font = Enum.Font.GothamBold
+        dropdownBtn.TextSize = 14
+        dropdownBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        dropdownBtn.Parent = dropdownHolder
+
+        local dropdownMenu = Instance.new("Frame")
+        dropdownMenu.Size = UDim2.new(1, 0, 0, #options * 30)
+        dropdownMenu.Position = UDim2.new(0, 0, 1, 0)
+        dropdownMenu.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        dropdownMenu.Visible = false
+        dropdownMenu.Parent = dropdownHolder
+
+        for i, option in ipairs(options) do
+            local optionBtn = Instance.new("TextButton")
+            optionBtn.Size = UDim2.new(1, 0, 0, 30)
+            optionBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            optionBtn.Text = option
+            optionBtn.Font = Enum.Font.Gotham
+            optionBtn.TextSize = 14
+            optionBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+            optionBtn.Parent = dropdownMenu
+
+            optionBtn.MouseButton1Click:Connect(function()
+                dropdownBtn.Text = option
+                dropdownMenu.Visible = false
+                pcall(callback, option)
+            end)
+        end
+
+        dropdownBtn.MouseButton1Click:Connect(function()
+            dropdownMenu.Visible = not dropdownMenu.Visible
         end)
     end
 
