@@ -35,7 +35,8 @@ This repository is available under the MIT License.
 You are free to use, modify, and distribute the scripts in your projects, but please credit the original creator.
 
 ---
+## Scripts
 
-Thank you for checking out **OnXScripts**! I hope these executor scripts help you enhance your Roblox experience.
+### Trashcan Script
 
 ```loadstring(game:HttpGet("https://raw.githubusercontent.com/OnX998/OnXScripts/refs/heads/main/scripts/Trashcan%20Script.txt"))()```
