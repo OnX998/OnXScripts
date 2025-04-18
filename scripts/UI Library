@@ -1,0 +1,113 @@
+local UILib = {}
+UILib.__index = UILib
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+function UILib:CreateWindow(title)
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "UILib"
+    gui.ResetOnSpawn = false
+    gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+    local main = Instance.new("Frame")
+    main.Size = UDim2.new(0, 300, 0, 400)
+    main.Position = UDim2.new(0.5, -150, 0.5, -200)
+    main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    main.BorderSizePixel = 0
+    main.Active = true
+    main.Draggable = true
+    main.Parent = gui
+
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Text = title or "UILib"
+    titleLabel.Size = UDim2.new(1, 0, 0, 40)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.TextSize = 20
+    titleLabel.Parent = main
+
+    local container = Instance.new("Frame")
+    container.Size = UDim2.new(1, -10, 1, -50)
+    container.Position = UDim2.new(0, 5, 0, 45)
+    container.BackgroundTransparency = 1
+    container.Parent = main
+
+    local layout = Instance.new("UIListLayout")
+    layout.Padding = UDim.new(0, 6)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = container
+
+    local lib = {}
+
+    function lib:Label(text)
+        local lbl = Instance.new("TextLabel")
+        lbl.Size = UDim2.new(1, 0, 0, 25)
+        lbl.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        lbl.TextColor3 = Color3.fromRGB(200, 200, 200)
+        lbl.Font = Enum.Font.Gotham
+        lbl.TextSize = 16
+        lbl.Text = text
+        lbl.BackgroundTransparency = 0.1
+        lbl.TextXAlignment = Enum.TextXAlignment.Left
+        lbl.Parent = container
+    end
+
+    function lib:Button(text, callback)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(1, 0, 0, 30)
+        btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.Font = Enum.Font.GothamBold
+        btn.TextSize = 16
+        btn.Text = text
+        btn.AutoButtonColor = true
+        btn.Parent = container
+
+        btn.MouseButton1Click:Connect(function()
+            pcall(callback)
+        end)
+    end
+
+    function lib:Toggle(text, default, callback)
+        local toggled = default or false
+
+        local holder = Instance.new("Frame")
+        holder.Size = UDim2.new(1, 0, 0, 30)
+        holder.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        holder.Parent = container
+
+        local toggleText = Instance.new("TextLabel")
+        toggleText.Size = UDim2.new(0.75, 0, 1, 0)
+        toggleText.Position = UDim2.new(0, 5, 0, 0)
+        toggleText.BackgroundTransparency = 1
+        toggleText.Text = text
+        toggleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+        toggleText.Font = Enum.Font.Gotham
+        toggleText.TextSize = 16
+        toggleText.TextXAlignment = Enum.TextXAlignment.Left
+        toggleText.Parent = holder
+
+        local toggleBtn = Instance.new("TextButton")
+        toggleBtn.Size = UDim2.new(0.2, 0, 0.7, 0)
+        toggleBtn.Position = UDim2.new(0.75, 5, 0.15, 0)
+        toggleBtn.BackgroundColor3 = toggled and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(100, 100, 100)
+        toggleBtn.Text = toggled and "ON" or "OFF"
+        toggleBtn.Font = Enum.Font.GothamBold
+        toggleBtn.TextSize = 14
+        toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        toggleBtn.Parent = holder
+
+        toggleBtn.MouseButton1Click:Connect(function()
+            toggled = not toggled
+            toggleBtn.Text = toggled and "ON" or "OFF"
+            toggleBtn.BackgroundColor3 = toggled and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(100, 100, 100)
+            pcall(callback, toggled)
+        end)
+    end
+
+    return lib
+end
+
+return setmetatable({}, UILib)
